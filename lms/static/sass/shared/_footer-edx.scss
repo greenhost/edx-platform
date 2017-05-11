@@ -68,7 +68,7 @@ footer#footer-edx-v3 {
   }
 
   .legal-notices {
-    margin: 20px 0 30px;
+    margin: 20px 0;
   }
 
   .openedx-link {
@@ -206,6 +206,15 @@ footer#footer-edx-v3 {
 
     .social-media-links {
       margin-bottom: 50px;
+    }
+  }
+
+  .footer-language-selector {
+    color: $edx-footer-link-color;
+    margin: 20px 0;
+    label[for=footer-language-select] {
+      display: inline-block;
+      cursor: initial;
     }
   }
 }

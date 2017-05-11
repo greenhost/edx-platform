@@ -186,6 +186,13 @@
         }
       }
     }
+
+    .footer-language-selector {
+      label[for=footer-language-select] {
+        display: inline-block;
+        cursor: initial;
+      }
+    }
   }
 
   // edx theme overrides

@@ -55,8 +55,12 @@ p {
 }
 
 span {
-  font: inherit;
   color: inherit;
+}
+
+/* Do not inherit the font when using font-based icons (like those provided by font-awesome) */
+span:not(.font-based-icon) {
+  font: inherit;
 }
 
 /* Fix for CodeMirror: prevent top-level span from affecting deeply-embedded span in CodeMirror */
