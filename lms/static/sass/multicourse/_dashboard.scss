@@ -1420,3 +1420,36 @@ a.fade-cover{
   }
 }
 
+// Dashboard alert messages
+.account-activation {
+  opacity: 0.9;
+
+  &.success {
+    background-color: #ecfaec;
+    border-top: #009b00 2px solid;
+
+    .fa.fa-check {
+      color: #009b00
+    }
+  }
+
+  &.error {
+    background-color: #feeced;
+    border-top: #cb0712 2px solid;
+
+    .fa.fa-check {
+      color: #b20610
+    }
+  }
+
+  .alert-message {
+    padding: 20px 0;
+  }
+
+  .message-copy {
+    color: #111111;
+    font-weight: 600;
+    font-size: large;
+  }
+}
+

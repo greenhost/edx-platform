@@ -721,6 +721,11 @@ def dashboard(request):
 
     enterprise_message = get_dashboard_consent_notification(request, user, course_enrollments)
 
+    # Account activation message
+    account_activation_messages = [
+        message for message in messages.get_messages(request) if 'account-activation' in message.tags
+    ]
+
     # Global staff can see what courses errored on their dashboard
     staff_access = False
     errored_courses = {}
@@ -844,6 +849,7 @@ def dashboard(request):
         'enterprise_message': enterprise_message,
         'enrollment_message': enrollment_message,
         'redirect_message': redirect_message,
+        'account_activation_messages': account_activation_messages,
         'course_enrollments': course_enrollments,
         'course_optouts': course_optouts,
         'banner_account_activation_message': banner_account_activation_message,
@@ -2285,6 +2291,39 @@ def auto_auth(request):
 @ensure_csrf_cookie
 def activate_account(request, key):
     """When link in activation e-mail is clicked"""
+
+    # If request is in Studio call the appropriate view
+    if theming_helpers.get_project_root_name().lower() == u'cms':
+        return activate_account_studio(request, key)
+
+    regs = Registration.objects.filter(activation_key=key)
+    if len(regs) == 1:
+        if not regs[0].user.is_active:
+            regs[0].activate()
+            # Add account activation success message for display later
+            messages.success(
+                request, 'You successfully activated your account.', extra_tags='account-activation',
+            )
+        else:
+            messages.success(
+                request, 'This account has already been activated.', extra_tags='account-activation',
+            )
+
+        # Enroll student in any pending courses he/she may have if auto_enroll flag is set
+        _enroll_user_in_pending_courses(regs[0].user)
+    else:
+        messages.error(
+            request, 'Something went wrong, Make sure you used correct activation url.',
+            extra_tags='account-activation'
+        )
+    return redirect('dashboard')
+
+
+@ensure_csrf_cookie
+def activate_account_studio(request, key):
+    """
+    When link in activation e-mail is clicked and the link belongs to studio.
+    """
     regs = Registration.objects.filter(activation_key=key)
     if len(regs) == 1:
         user_logged_in = request.user.is_authenticated()
