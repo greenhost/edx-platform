@@ -2116,7 +2116,9 @@ class TestRenderXBlockSelfPaced(TestRenderXBlock):
         SelfPacedConfiguration(enabled=True).save()
 
     def course_options(self):
-        return {'self_paced': True}
+        options = super(TestRenderXBlockSelfPaced, self).course_options()
+        options['self_paced'] = True
+        return options
 
 
 class TestIndexViewCrawlerStudentStateWrites(SharedModuleStoreTestCase):
