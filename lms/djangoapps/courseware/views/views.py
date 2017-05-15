@@ -513,6 +513,13 @@ class CourseTabView(EdxFragmentView):
             request.user = masquerade_user
         else:
             masquerade = None
+
+        now = datetime.now(UTC())
+        effective_start = _adjust_start_date_for_beta_testers(request.user, course, course.id)
+        if not in_preview_mode() and staff_access and now < effective_start:
+            # Disable student view button if user is staff and
+            # course is not yet visible to students.
+            supports_preview_menu = False
         return {
             'course': course,
             'tab': tab,

@@ -365,6 +365,7 @@ class CoursewareIndex(View):
             # Disable student view button if user is staff and
             # course is not yet visible to students.
             courseware_context['disable_student_access'] = True
+            courseware_context['supports_preview_menu'] = False
 
         if self.section:
             # chromeless data
